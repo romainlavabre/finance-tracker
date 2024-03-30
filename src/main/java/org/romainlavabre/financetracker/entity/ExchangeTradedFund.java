@@ -23,6 +23,12 @@ public class ExchangeTradedFund {
             @Group
     } )
     @Column( nullable = false )
+    protected String productId;
+
+    @Json( groups = {
+            @Group
+    } )
+    @Column( nullable = false )
     protected String publicName;
 
     @Json( groups = {
@@ -34,12 +40,33 @@ public class ExchangeTradedFund {
     @Json( groups = {
             @Group
     } )
+    protected float pricing;
+
+    @Json( groups = {
+            @Group
+    } )
     @Column( nullable = false )
     protected ZonedDateTime lastScrapAt;
 
 
     public long getId() {
         return id;
+    }
+
+
+    public String getProductId() {
+        return productId;
+    }
+
+
+    public ExchangeTradedFund setProductId( String productId ) {
+        if ( productId == null || productId.isBlank() ) {
+            throw new HttpUnprocessableEntityException( Message.EXCHANGE_TRADED_FUND_PRODUCT_ID_REQUIRED );
+        }
+
+        this.productId = productId;
+
+        return this;
     }
 
 
@@ -70,6 +97,22 @@ public class ExchangeTradedFund {
         }
 
         this.pageLink = pageLink;
+
+        return this;
+    }
+
+
+    public float getPricing() {
+        return pricing;
+    }
+
+
+    public ExchangeTradedFund setPricing( Float pricing ) {
+        if ( pricing == null ) {
+            throw new HttpUnprocessableEntityException( Message.EXCHANGE_TRADED_FUND_PRICING_REQUIRED );
+        }
+
+        this.pricing = pricing;
 
         return this;
     }
