@@ -93,8 +93,8 @@ public interface Scrapper {
         }
 
 
-        public ScrapperResult addSectorDistribution( String currency, float distribution ) {
-            sectorDistribution.put( currency, distribution );
+        public ScrapperResult addSectorDistribution( String sector, float distribution ) {
+            sectorDistribution.put( sector, distribution );
 
             return this;
         }
