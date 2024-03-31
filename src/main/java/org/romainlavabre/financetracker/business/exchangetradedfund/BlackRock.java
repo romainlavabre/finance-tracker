@@ -22,7 +22,8 @@ public class BlackRock implements Provider {
 
         Response response =
                 Rest.builder()
-                        .get( pageLink )
+                        .get( "https://www.ishares.com/us/products/{productId}/unknow" )
+                        .routeParam( "productId", productId )
                         .buildAndSend( RequestBuilder.RESPONSE_HTML );
 
         if ( !response.isSuccess() ) {
@@ -44,8 +45,6 @@ public class BlackRock implements Provider {
 
 
     protected void resolveAnnuallyYield( Scrapper.ScrapperResult scrapperResult, String htmlBody ) {
-        htmlBody = htmlBody.split( "product-table border-row calendar-year" )[ 1 ];
-
         String[] classNames = new String[]{ "tenYear", "nineYear", "eightYear", "sevenYear", "sixYear", "fiveYear", "fourYear", "threeYear", "twoYear", "oneYear" };
 
         for ( String className : classNames ) {
@@ -55,7 +54,7 @@ public class BlackRock implements Provider {
             if ( matcher.find() ) {
                 int year = Cast.getInt( matcher.group( 1 ) );
 
-                pattern = Pattern.compile( "<td class=\"" + className + " \">\\n([0-9,-]+)\\n</td>" );
+                pattern = Pattern.compile( "<td class=\"" + className + " \">\\n([0-9.-]+)\\n</td>" );
                 matcher = pattern.matcher( htmlBody );
 
                 if ( matcher.find() ) {
@@ -80,7 +79,7 @@ public class BlackRock implements Provider {
 
         Response response =
                 Rest.builder()
-                        .get( "https://www.blackrock.com" + matcher.group( 1 ) )
+                        .get( "https://www.ishares.com" + matcher.group( 1 ) )
                         .buildAndSend( RequestBuilder.RESPONSE_HTML );
 
         htmlBody = response.getBodyAsString();
@@ -139,7 +138,7 @@ public class BlackRock implements Provider {
         for ( Object object : array ) {
             JSONObject jsonObject = ( JSONObject ) object;
 
-            if ( jsonObject.getString( "name" ).equals( "Liquidités et/ou produits dérivés" )
+            if ( jsonObject.getString( "name" ).contains( "/" )
                     || jsonObject.get( "name" ).equals( "Other" ) ) {
                 continue;
             }
@@ -150,7 +149,10 @@ public class BlackRock implements Provider {
 
 
     protected String resolveProductId( String pageLink ) {
-        return pageLink.split( "/" )[ 6 ];
+
+        return pageLink.contains( "blackrock" )
+                ? pageLink.split( "/" )[ 6 ]
+                : pageLink.split( "/" )[ 5 ];
     }
 
 
@@ -172,6 +174,7 @@ public class BlackRock implements Provider {
 
     @Override
     public boolean isMatch( String pageLink ) {
-        return pageLink.startsWith( "https://www.blackrock.com" );
+        return pageLink.startsWith( "https://www.blackrock.com" )
+                || pageLink.contains( "ishares" );
     }
 }

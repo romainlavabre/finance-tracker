@@ -25,6 +25,11 @@ public interface Scrapper {
         @Json( groups = {
                 @Group
         } )
+        private int riskLevel;
+
+        @Json( groups = {
+                @Group
+        } )
         protected final Map< Integer, Float > annuallyYield;
 
         @Json( groups = {
@@ -60,6 +65,13 @@ public interface Scrapper {
 
         public ScrapperResult setPricing( float pricing ) {
             this.pricing = pricing;
+
+            return this;
+        }
+
+
+        public ScrapperResult setRiskLevel( int riskLevel ) {
+            this.riskLevel = riskLevel;
 
             return this;
         }
