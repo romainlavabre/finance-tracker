@@ -29,6 +29,12 @@ public class ExchangeTradedFund {
             @Group
     } )
     @Column( nullable = false )
+    protected String provider;
+
+    @Json( groups = {
+            @Group
+    } )
+    @Column( nullable = false )
     protected String publicName;
 
     @Json( groups = {
@@ -45,8 +51,23 @@ public class ExchangeTradedFund {
     @Json( groups = {
             @Group
     } )
+    protected byte risk;
+
+    @Json( groups = {
+            @Group
+    } )
+    protected float amount;
+
+    @Json( groups = {
+            @Group
+    } )
     @Column( nullable = false )
     protected ZonedDateTime lastScrapAt;
+
+
+    public ExchangeTradedFund() {
+        lastScrapAt = ZonedDateTime.now( ZoneOffset.UTC );
+    }
 
 
     public long getId() {
@@ -65,6 +86,22 @@ public class ExchangeTradedFund {
         }
 
         this.productId = productId;
+
+        return this;
+    }
+
+
+    public String getProvider() {
+        return provider;
+    }
+
+
+    public ExchangeTradedFund setProvider( String provider ) {
+        if ( provider == null || provider.isBlank() ) {
+            throw new HttpUnprocessableEntityException( Message.EXCHANGE_TRADED_FUND_PROVIDER_REQUIRED );
+        }
+
+        this.provider = provider.toUpperCase();
 
         return this;
     }
@@ -113,6 +150,38 @@ public class ExchangeTradedFund {
         }
 
         this.pricing = pricing;
+
+        return this;
+    }
+
+
+    public byte getRisk() {
+        return risk;
+    }
+
+
+    public ExchangeTradedFund setRisk( Byte risk ) {
+        if ( risk == null ) {
+            throw new HttpUnprocessableEntityException( Message.EXCHANGE_TRADED_FUND_RISK_REQUIRED );
+        }
+
+        this.risk = risk;
+
+        return this;
+    }
+
+
+    public float getAmount() {
+        return amount;
+    }
+
+
+    public ExchangeTradedFund setAmount( Float amount ) {
+        if ( amount == null ) {
+            throw new HttpUnprocessableEntityException( Message.EXCHANGE_TRADED_FUND_AMOUNT_REQUIRED );
+        }
+
+        this.amount = amount;
 
         return this;
     }
