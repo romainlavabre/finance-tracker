@@ -3,11 +3,14 @@ package org.romainlavabre.financetracker.entity;
 import jakarta.persistence.*;
 import org.romainlavabre.encoder.annotation.Group;
 import org.romainlavabre.encoder.annotation.Json;
+import org.romainlavabre.exception.HttpConflictException;
 import org.romainlavabre.exception.HttpUnprocessableEntityException;
 import org.romainlavabre.financetracker.configuration.response.Message;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class ExchangeTradedFund {
@@ -64,9 +67,13 @@ public class ExchangeTradedFund {
     @Column( nullable = false )
     protected ZonedDateTime lastScrapAt;
 
+    @OneToMany( cascade = CascadeType.PERSIST, mappedBy = "exchangeTradedFund" )
+    protected final List< AnnuallyYield > annuallyYields;
+
 
     public ExchangeTradedFund() {
-        lastScrapAt = ZonedDateTime.now( ZoneOffset.UTC );
+        lastScrapAt    = ZonedDateTime.now( ZoneOffset.UTC );
+        annuallyYields = new ArrayList<>();
     }
 
 
@@ -194,6 +201,30 @@ public class ExchangeTradedFund {
 
     public ExchangeTradedFund scraped() {
         this.lastScrapAt = ZonedDateTime.now( ZoneOffset.UTC );
+
+        return this;
+    }
+
+
+    public List< AnnuallyYield > getAnnuallyYields() {
+        return annuallyYields;
+    }
+
+
+    public ExchangeTradedFund addAnnuallyYield( AnnuallyYield annuallyYield ) {
+        if ( !annuallyYields.contains( annuallyYield ) ) {
+            for ( AnnuallyYield localAnnuallyYield : annuallyYields ) {
+                if ( localAnnuallyYield.getYear() == annuallyYield.getYear() ) {
+                    throw new HttpConflictException( Message.ANNUALLY_YIELD_ALREADY_EXISTS );
+                }
+            }
+
+            annuallyYields.add( annuallyYield );
+
+            if ( annuallyYield.getExchangeTradedFund() != this ) {
+                annuallyYield.setExchangeTradedFund( this );
+            }
+        }
 
         return this;
     }
