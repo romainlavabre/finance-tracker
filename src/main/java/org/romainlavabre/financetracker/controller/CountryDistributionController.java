@@ -54,8 +54,8 @@ public class CountryDistributionController {
 
 
     @Transactional
-    @PatchMapping( path = "/{id:[0-9]+}/name" )
-    public ResponseEntity< Map< String, Object > > updateName( @PathVariable( "id" ) long id ) {
+    @PatchMapping( path = "/{id:[0-9]+}/weight" )
+    public ResponseEntity< Map< String, Object > > updateWeight( @PathVariable( "id" ) long id ) {
         CountryDistribution countryDistribution = countryDistributionRepository.findOrFail( id );
 
         updateCountryDistributionWeight.update( request, countryDistribution );
