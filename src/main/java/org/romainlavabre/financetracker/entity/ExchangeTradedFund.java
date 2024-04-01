@@ -70,6 +70,9 @@ public class ExchangeTradedFund {
     @OneToMany( cascade = CascadeType.PERSIST, mappedBy = "exchangeTradedFund" )
     protected final List< AnnuallyYield > annuallyYields;
 
+    @OneToOne( cascade = CascadeType.PERSIST, mappedBy = "exchangeTradedFund" )
+    protected CumulativeYield cumulativeYield;
+
 
     public ExchangeTradedFund() {
         lastScrapAt    = ZonedDateTime.now( ZoneOffset.UTC );
@@ -224,6 +227,22 @@ public class ExchangeTradedFund {
             if ( annuallyYield.getExchangeTradedFund() != this ) {
                 annuallyYield.setExchangeTradedFund( this );
             }
+        }
+
+        return this;
+    }
+
+
+    public CumulativeYield getCumulativeYield() {
+        return cumulativeYield;
+    }
+
+
+    public ExchangeTradedFund setCumulativeYield( CumulativeYield cumulativeYield ) {
+        this.cumulativeYield = cumulativeYield;
+
+        if ( cumulativeYield.getExchangeTradedFund() != this ) {
+            cumulativeYield.setExchangeTradedFund( this );
         }
 
         return this;
