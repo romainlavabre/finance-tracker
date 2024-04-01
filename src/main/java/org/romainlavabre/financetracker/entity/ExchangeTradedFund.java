@@ -67,20 +67,37 @@ public class ExchangeTradedFund {
     @Column( nullable = false )
     protected ZonedDateTime lastScrapAt;
 
+    @Json( groups = {
+            @Group
+    } )
     @OneToMany( cascade = CascadeType.PERSIST, mappedBy = "exchangeTradedFund" )
     protected final List< AnnuallyYield > annuallyYields;
 
+    @Json( groups = {
+            @Group
+    } )
     @OneToOne( cascade = CascadeType.PERSIST, mappedBy = "exchangeTradedFund" )
     protected CumulativeYield cumulativeYield;
 
+    @Json( groups = {
+            @Group
+    } )
     @OneToMany( mappedBy = "exchangeTradedFund", cascade = CascadeType.PERSIST )
     protected final List< CountryDistribution > countryDistributions;
+
+
+    @Json( groups = {
+            @Group
+    } )
+    @OneToMany( mappedBy = "exchangeTradedFund", cascade = CascadeType.PERSIST )
+    protected final List< SectorDistribution > sectorDistributions;
 
 
     public ExchangeTradedFund() {
         lastScrapAt          = ZonedDateTime.now( ZoneOffset.UTC );
         annuallyYields       = new ArrayList<>();
         countryDistributions = new ArrayList<>();
+        sectorDistributions  = new ArrayList<>();
     }
 
 
@@ -264,6 +281,24 @@ public class ExchangeTradedFund {
 
             if ( countryDistribution.getExchangeTradedFund() != this ) {
                 countryDistribution.setExchangeTradedFund( this );
+            }
+        }
+
+        return this;
+    }
+
+
+    public List< SectorDistribution > getSectorDistributions() {
+        return sectorDistributions;
+    }
+
+
+    public ExchangeTradedFund addSectorDistribution( SectorDistribution sectorDistribution ) {
+        if ( !sectorDistributions.contains( sectorDistribution ) ) {
+            sectorDistributions.add( sectorDistribution );
+
+            if ( sectorDistribution.getExchangeTradedFund() != this ) {
+                sectorDistribution.setExchangeTradedFund( this );
             }
         }
 
