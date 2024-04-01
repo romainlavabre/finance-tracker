@@ -17,7 +17,10 @@ public interface StatisticBuilder {
 
 
     void getContinentDistribution();
-    
+
 
     void getSectorDistribution();
+
+
+    void getPastPerformanceAggregateByYear();
 }
