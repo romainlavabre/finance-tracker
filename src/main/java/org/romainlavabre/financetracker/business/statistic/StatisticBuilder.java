@@ -1,26 +1,62 @@
 package org.romainlavabre.financetracker.business.statistic;
 
+import org.romainlavabre.financetracker.business.statistic.dto.*;
+
+import java.util.List;
+
 public interface StatisticBuilder {
-    void getPatrimony();
+    /**
+     * Sum of the ETF amount
+     *
+     * @return Total of patrimony
+     */
+    Patrimony getPatrimony();
 
 
-    void getRiskDistribution();
+    /**
+     * @return Risk distribution weighted by the weight of ETF
+     */
+    List< RiskDistribution > getRiskDistribution();
 
 
-    void getProviderDistribution();
+    /**
+     * @return Provider distribution weighted by the weight of ETF
+     */
+    List< ProviderDistribution > getProviderDistribution();
 
 
-    void getExchangeTradedFundDistribution();
+    /**
+     * @return ETF distribution
+     */
+    List< ExchangeTradedFundDistribution > getExchangeTradedFundDistribution();
 
 
-    void getCountryDistribution();
+    /**
+     * @return Country distribution weighted by the weight of ETF
+     */
+    List< CountryDistribution > getCountryDistribution();
 
 
-    void getContinentDistribution();
+    /**
+     * @return Continent distribution weighted by the weight of ETF
+     */
+    List< ContinentDistribution > getContinentDistribution();
 
 
-    void getSectorDistribution();
+    /**
+     * @return Sector distribution weighted by the weight of ETF
+     */
+    List< SectorDistribution > getSectorDistribution();
 
 
-    void getPastPerformanceAggregateByYear();
+    /**
+     * @return Past performance of your portfolio by year
+     */
+    List< PastPerformanceAggregateByYear > getPastPerformanceAggregateByYear();
+
+
+    /**
+     * @return Average pricing weighted by the weight of ETF
+     */
+    AveragePricing getAveragePricing();
 }

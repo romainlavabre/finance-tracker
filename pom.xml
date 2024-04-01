@@ -126,6 +126,11 @@
             <groupId>org.romainlavabre</groupId>
             <artifactId>tokengen</artifactId>
         </dependency>
+        <!-- SUBMODULE PAGINATION -->
+        <dependency>
+            <groupId>org.romainlavabre</groupId>
+            <artifactId>pagination</artifactId>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -188,6 +193,12 @@
                 <groupId>org.romainlavabre</groupId>
                 <artifactId>tokengen</artifactId>
                 <version>2.0.0</version>
+            </dependency>
+            <!-- SUBMODULE PAGINATION -->
+            <dependency>
+                <groupId>org.romainlavabre</groupId>
+                <artifactId>pagination</artifactId>
+                <version>5.0.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

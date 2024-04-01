@@ -25,7 +25,7 @@ public class ExchangeTradedFund {
     @Json( groups = {
             @Group
     } )
-    @Column( nullable = false )
+    @Column( nullable = false, unique = true )
     protected String productId;
 
     @Json( groups = {
@@ -37,7 +37,7 @@ public class ExchangeTradedFund {
     @Json( groups = {
             @Group
     } )
-    @Column( nullable = false )
+    @Column( nullable = false, unique = true )
     protected String publicName;
 
     @Json( groups = {
