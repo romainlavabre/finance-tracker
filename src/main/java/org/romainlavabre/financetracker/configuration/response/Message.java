@@ -16,4 +16,6 @@ public interface Message {
     String ANNUALLY_YIELD_YEAR_REQUIRED                         = "ANNUALLY_YIELD_YEAR_REQUIRED";
     String ANNUALLY_YIELD_YIELD_REQUIRED                        = "ANNUALLY_YIELD_YIELD_REQUIRED";
     String ANNUALLY_YIELD_ALREADY_EXISTS                        = "ANNUALLY_YIELD_ALREADY_EXISTS";
+    String COUNTRY_NAME_REQUIRED                                = "COUNTRY_NAME_REQUIRED";
+    String COUNTRY_CONTINENT_REQUIRED                           = "COUNTRY_CONTINENT_REQUIRED";
 }
