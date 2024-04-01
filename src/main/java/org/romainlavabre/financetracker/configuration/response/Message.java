@@ -18,4 +18,5 @@ public interface Message {
     String ANNUALLY_YIELD_ALREADY_EXISTS                        = "ANNUALLY_YIELD_ALREADY_EXISTS";
     String COUNTRY_NAME_REQUIRED                                = "COUNTRY_NAME_REQUIRED";
     String COUNTRY_CONTINENT_REQUIRED                           = "COUNTRY_CONTINENT_REQUIRED";
+    String COUNTRY_DISTRIBUTION_WEIGHT_REQUIRED                 = "COUNTRY_DISTRIBUTION_WEIGHT_REQUIRED";
 }

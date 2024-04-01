@@ -1,0 +1,72 @@
+package org.romainlavabre.financetracker.entity;
+
+import jakarta.persistence.*;
+import org.romainlavabre.exception.HttpUnprocessableEntityException;
+import org.romainlavabre.financetracker.configuration.response.Message;
+
+@Entity
+public class CountryDistribution {
+
+    @Id
+    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    protected long id;
+
+    protected float weight;
+
+    @ManyToOne
+    @JoinColumn( nullable = false )
+    protected Country country;
+
+    @ManyToOne
+    @JoinColumn( nullable = false )
+    protected ExchangeTradedFund exchangeTradedFund;
+
+
+    public long getId() {
+        return id;
+    }
+
+
+    public float getWeight() {
+        return weight;
+    }
+
+
+    public CountryDistribution setWeight( Float weight ) {
+        if ( weight == null ) {
+            throw new HttpUnprocessableEntityException( Message.COUNTRY_DISTRIBUTION_WEIGHT_REQUIRED );
+        }
+
+        this.weight = weight;
+
+        return this;
+    }
+
+
+    public Country getCountry() {
+        return country;
+    }
+
+
+    public CountryDistribution setCountry( Country country ) {
+        this.country = country;
+
+        return this;
+    }
+
+
+    public ExchangeTradedFund getExchangeTradedFund() {
+        return exchangeTradedFund;
+    }
+
+
+    public CountryDistribution setExchangeTradedFund( ExchangeTradedFund exchangeTradedFund ) {
+        this.exchangeTradedFund = exchangeTradedFund;
+
+        if ( !exchangeTradedFund.getCountryDistributions().contains( this ) ) {
+            exchangeTradedFund.addCountryDistribution( this );
+        }
+        
+        return this;
+    }
+}
