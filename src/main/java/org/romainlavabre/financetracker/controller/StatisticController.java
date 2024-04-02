@@ -54,6 +54,30 @@ public class StatisticController {
     }
 
 
+    @GetMapping( path = "/country_distribution" )
+    public ResponseEntity< List< Map< String, Object > > > getCountryDistribution() {
+        List< CountryDistribution > countryDistribution = statisticBuilder.getCountryDistribution();
+
+        return ResponseEntity.ok( Encoder.encode( countryDistribution ) );
+    }
+
+
+    @GetMapping( path = "/continent_distribution" )
+    public ResponseEntity< List< Map< String, Object > > > getContinentDistribution() {
+        List< ContinentDistribution > continentDistribution = statisticBuilder.getContinentDistribution();
+
+        return ResponseEntity.ok( Encoder.encode( continentDistribution ) );
+    }
+
+
+    @GetMapping( path = "/sector_distribution" )
+    public ResponseEntity< List< Map< String, Object > > > getSectorDistribution() {
+        List< SectorDistribution > sectorDistribution = statisticBuilder.getSectorDistribution();
+
+        return ResponseEntity.ok( Encoder.encode( sectorDistribution ) );
+    }
+
+
     @GetMapping( path = "/average_pricing" )
     public ResponseEntity< Map< String, Object > > getAveragePricing() {
         AveragePricing averagePricing = statisticBuilder.getAveragePricing();

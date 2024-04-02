@@ -19,6 +19,7 @@ public interface Message {
     String COUNTRY_NAME_REQUIRED                                = "COUNTRY_NAME_REQUIRED";
     String COUNTRY_CONTINENT_REQUIRED                           = "COUNTRY_CONTINENT_REQUIRED";
     String COUNTRY_DISTRIBUTION_WEIGHT_REQUIRED                 = "COUNTRY_DISTRIBUTION_WEIGHT_REQUIRED";
+    String COUNTRY_CONTINENT_INVALID                            = "COUNTRY_CONTINENT_INVALID";
     String SECTOR_NAME_REQUIRED                                 = "SECTOR_NAME_REQUIRED";
     String SECTOR_DISTRIBUTION_WEIGHT_REQUIRED                  = "SECTOR_DISTRIBUTION_WEIGHT_REQUIRED";
 }

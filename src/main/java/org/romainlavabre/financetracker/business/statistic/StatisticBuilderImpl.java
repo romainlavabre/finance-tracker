@@ -16,10 +16,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Service
 public class StatisticBuilderImpl implements StatisticBuilder {
@@ -124,19 +121,111 @@ public class StatisticBuilderImpl implements StatisticBuilder {
 
     @Override
     public List< CountryDistribution > getCountryDistribution() {
-        return null;
+        List< ExchangeTradedFundDistribution > exchangeTradedFundDistributions = getExchangeTradedFundDistribution();
+
+        Map< String, Float > value = new HashMap<>();
+
+        for ( ExchangeTradedFundDistribution exchangeTradedFundDistribution : exchangeTradedFundDistributions ) {
+            ExchangeTradedFund exchangeTradedFund = exchangeTradedFundRepository.findOrFail( exchangeTradedFundDistribution.id );
+
+            for ( org.romainlavabre.financetracker.entity.CountryDistribution countryDistribution : exchangeTradedFund.getCountryDistributions() ) {
+                String countryName = countryDistribution.getCountry().getName();
+
+                if ( !value.containsKey( countryName ) ) {
+                    value.put( countryName, 0f );
+                }
+
+                value.put( countryName, value.get( countryName ) + ( countryDistribution.getWeight() * exchangeTradedFundDistribution.weight ) );
+            }
+        }
+
+        List< CountryDistribution > countryDistributions = new ArrayList<>();
+        float                       total                = 0;
+
+        for ( Map.Entry< String, Float > entry : value.entrySet() ) {
+            total += entry.getValue() / 100;
+
+            countryDistributions.add( new CountryDistribution( entry.getKey(), entry.getValue() / 100 ) );
+        }
+
+        if ( total > 0 ) {
+            countryDistributions.add( new CountryDistribution( "UNKNOWN", 100 - total ) );
+        }
+
+        return countryDistributions;
     }
 
 
     @Override
     public List< ContinentDistribution > getContinentDistribution() {
-        return null;
+        List< ExchangeTradedFundDistribution > exchangeTradedFundDistributions = getExchangeTradedFundDistribution();
+
+        Map< String, Float > value = new HashMap<>();
+
+        for ( ExchangeTradedFundDistribution exchangeTradedFundDistribution : exchangeTradedFundDistributions ) {
+            ExchangeTradedFund exchangeTradedFund = exchangeTradedFundRepository.findOrFail( exchangeTradedFundDistribution.id );
+
+            for ( org.romainlavabre.financetracker.entity.CountryDistribution countryDistribution : exchangeTradedFund.getCountryDistributions() ) {
+                String continentName = countryDistribution.getCountry().getContinentAsString();
+
+                if ( !value.containsKey( continentName ) ) {
+                    value.put( continentName, 0f );
+                }
+
+                value.put( continentName, value.get( continentName ) + ( countryDistribution.getWeight() * exchangeTradedFundDistribution.weight ) );
+            }
+        }
+
+        List< ContinentDistribution > continentDistributions = new ArrayList<>();
+        float                         total                  = 0;
+
+        for ( Map.Entry< String, Float > entry : value.entrySet() ) {
+            total += entry.getValue() / 100;
+            continentDistributions.add( new ContinentDistribution( entry.getKey(), entry.getValue() / 100 ) );
+        }
+
+        if ( total > 0 ) {
+            continentDistributions.add( new ContinentDistribution( "UNKNOWN", 100 - total ) );
+        }
+
+        return continentDistributions;
     }
 
 
     @Override
     public List< SectorDistribution > getSectorDistribution() {
-        return null;
+        List< ExchangeTradedFundDistribution > exchangeTradedFundDistributions = getExchangeTradedFundDistribution();
+
+        Map< String, Float > value = new HashMap<>();
+
+        for ( ExchangeTradedFundDistribution exchangeTradedFundDistribution : exchangeTradedFundDistributions ) {
+            ExchangeTradedFund exchangeTradedFund = exchangeTradedFundRepository.findOrFail( exchangeTradedFundDistribution.id );
+
+            for ( org.romainlavabre.financetracker.entity.SectorDistribution sectorDistribution : exchangeTradedFund.getSectorDistributions() ) {
+                String sectorName = sectorDistribution.getSector().getName();
+
+                if ( !value.containsKey( sectorName ) ) {
+                    value.put( sectorName, 0f );
+                }
+
+                value.put( sectorName, value.get( sectorName ) + ( sectorDistribution.getWeight() * exchangeTradedFundDistribution.weight ) );
+            }
+        }
+
+        List< SectorDistribution > sectorDistributions = new ArrayList<>();
+        float                      total               = 0;
+
+        for ( Map.Entry< String, Float > entry : value.entrySet() ) {
+            total += entry.getValue() / 100;
+
+            sectorDistributions.add( new SectorDistribution( entry.getKey(), entry.getValue() / 100 ) );
+        }
+
+        if ( total > 0 ) {
+            sectorDistributions.add( new SectorDistribution( "UNKNOWN", 100 - total ) );
+        }
+
+        return sectorDistributions;
     }
 
 

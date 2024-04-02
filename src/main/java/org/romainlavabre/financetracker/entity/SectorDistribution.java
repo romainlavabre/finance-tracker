@@ -1,22 +1,36 @@
 package org.romainlavabre.financetracker.entity;
 
 import jakarta.persistence.*;
+import org.romainlavabre.encoder.annotation.Group;
+import org.romainlavabre.encoder.annotation.Json;
 import org.romainlavabre.exception.HttpUnprocessableEntityException;
 import org.romainlavabre.financetracker.configuration.response.Message;
 
 @Entity
 public class SectorDistribution {
 
+    @Json( groups = {
+            @Group
+    } )
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     protected long id;
 
+    @Json( groups = {
+            @Group
+    } )
     protected float weight;
 
+    @Json( groups = {
+            @Group
+    } )
     @ManyToOne
     @JoinColumn( nullable = false )
     protected Sector sector;
 
+    @Json( groups = {
+            @Group
+    } )
     @ManyToOne
     @JoinColumn( nullable = false )
     protected ExchangeTradedFund exchangeTradedFund;

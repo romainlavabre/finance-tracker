@@ -59,8 +59,39 @@ public class Country {
             throw new HttpUnprocessableEntityException( Message.COUNTRY_CONTINENT_REQUIRED );
         }
 
+        if ( continent != CONTINENT_EUROPE
+                && continent != CONTINENT_AFRICA
+                && continent != CONTINENT_ASIA
+                && continent != CONTINENT_AUSTRALIA
+                && continent != CONTINENT_AMERICA ) {
+            throw new HttpUnprocessableEntityException( Message.COUNTRY_CONTINENT_INVALID );
+        }
+
         this.continent = continent;
 
         return this;
+    }
+
+
+    public String getContinentAsString() {
+        switch ( continent ) {
+            case CONTINENT_EUROPE -> {
+                return "Europe";
+            }
+            case CONTINENT_AFRICA -> {
+                return "Africa";
+            }
+            case CONTINENT_ASIA -> {
+                return "Asia";
+            }
+            case CONTINENT_AUSTRALIA -> {
+                return "Australia";
+            }
+            case CONTINENT_AMERICA -> {
+                return "America";
+            }
+        }
+
+        return null;
     }
 }
