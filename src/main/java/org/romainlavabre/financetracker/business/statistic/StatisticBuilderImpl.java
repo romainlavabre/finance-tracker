@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.romainlavabre.exception.HttpInternalServerErrorException;
 import org.romainlavabre.financetracker.business.statistic.dto.*;
+import org.romainlavabre.financetracker.entity.AnnuallyYield;
 import org.romainlavabre.financetracker.entity.ExchangeTradedFund;
 import org.romainlavabre.financetracker.repository.ExchangeTradedFundRepository;
 import org.springframework.core.io.Resource;
@@ -231,7 +232,31 @@ public class StatisticBuilderImpl implements StatisticBuilder {
 
     @Override
     public List< PastPerformanceAggregateByYear > getPastPerformanceAggregateByYear() {
-        return null;
+        List< ExchangeTradedFundDistribution > exchangeTradedFundDistributions = getExchangeTradedFundDistribution();
+
+        Map< Short, Float > value = new HashMap<>();
+
+        for ( ExchangeTradedFundDistribution exchangeTradedFundDistribution : exchangeTradedFundDistributions ) {
+            ExchangeTradedFund exchangeTradedFund = exchangeTradedFundRepository.findOrFail( exchangeTradedFundDistribution.id );
+
+            for ( AnnuallyYield annuallyYield : exchangeTradedFund.getAnnuallyYields() ) {
+                short year = annuallyYield.getYear();
+
+                if ( !value.containsKey( year ) ) {
+                    value.put( year, 0f );
+                }
+
+                value.put( year, value.get( year ) + ( annuallyYield.getYield() * exchangeTradedFundDistribution.weight ) );
+            }
+        }
+
+        List< PastPerformanceAggregateByYear > pastPerformanceAggregateByYears = new ArrayList<>();
+
+        for ( Map.Entry< Short, Float > entry : value.entrySet() ) {
+            pastPerformanceAggregateByYears.add( new PastPerformanceAggregateByYear( entry.getKey(), entry.getValue() / 100 ) );
+        }
+
+        return pastPerformanceAggregateByYears;
     }
 
 

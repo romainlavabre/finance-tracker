@@ -78,6 +78,14 @@ public class StatisticController {
     }
 
 
+    @GetMapping( path = "/past_performance" )
+    public ResponseEntity< List< Map< String, Object > > > getPastPerformanceAggregateByYear() {
+        List< PastPerformanceAggregateByYear > pastPerformanceAggregateByYear = statisticBuilder.getPastPerformanceAggregateByYear();
+
+        return ResponseEntity.ok( Encoder.encode( pastPerformanceAggregateByYear ) );
+    }
+
+
     @GetMapping( path = "/average_pricing" )
     public ResponseEntity< Map< String, Object > > getAveragePricing() {
         AveragePricing averagePricing = statisticBuilder.getAveragePricing();
