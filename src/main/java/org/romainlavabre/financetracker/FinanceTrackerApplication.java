@@ -26,7 +26,7 @@ public class FinanceTrackerApplication {
                 final String pattern = "/**";
 
                 registry.addMapping( pattern )
-                        .allowedMethods( "GET", "POST", "PUT", "DELETE" )
+                        .allowedMethods( "GET", "POST", "PATCH", "PUT", "DELETE" )
                         .allowedOrigins( "*" )
                         .exposedHeaders( "Location", "Authorization" );
             }

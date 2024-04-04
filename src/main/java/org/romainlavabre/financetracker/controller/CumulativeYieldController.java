@@ -6,7 +6,9 @@ import org.romainlavabre.crud.Update;
 import org.romainlavabre.database.DataStorageHandler;
 import org.romainlavabre.encoder.Encoder;
 import org.romainlavabre.financetracker.entity.CumulativeYield;
+import org.romainlavabre.financetracker.entity.ExchangeTradedFund;
 import org.romainlavabre.financetracker.repository.CumulativeYieldRepository;
+import org.romainlavabre.financetracker.repository.ExchangeTradedFundRepository;
 import org.romainlavabre.request.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +19,19 @@ import java.util.Map;
 @RequestMapping( path = "/cumulative_yields" )
 public class CumulativeYieldController {
 
-    protected final Create< CumulativeYield > createCumulativeYield;
-    protected final Update< CumulativeYield > updateCumulativeYieldToTenYear;
-    protected final Update< CumulativeYield > updateCumulativeYieldToFiveYear;
-    protected final Update< CumulativeYield > updateCumulativeYieldToThreeYear;
-    protected final Update< CumulativeYield > updateCumulativeYieldToOneYear;
-    protected final Update< CumulativeYield > updateCumulativeYieldSinceCreation;
-    protected final CumulativeYieldRepository cumulativeYieldRepository;
-    protected final DataStorageHandler        dataStorageHandler;
-    protected final Request                   request;
+    protected final Create< CumulativeYield >    createCumulativeYield;
+    protected final Update< CumulativeYield >    updateCumulativeYieldToTenYear;
+    protected final Update< CumulativeYield >    updateCumulativeYieldToFiveYear;
+    protected final Update< CumulativeYield >    updateCumulativeYieldToThreeYear;
+    protected final Update< CumulativeYield >    updateCumulativeYieldToOneYear;
+    protected final Update< CumulativeYield >    updateCumulativeYieldSinceCreation;
+    protected final CumulativeYieldRepository    cumulativeYieldRepository;
+    protected final ExchangeTradedFundRepository exchangeTradedFundRepository;
+    protected final DataStorageHandler           dataStorageHandler;
+    protected final Request                      request;
 
 
-    public CumulativeYieldController( Create< CumulativeYield > createCumulativeYield, Update< CumulativeYield > updateCumulativeYieldToTenYear, Update< CumulativeYield > updateCumulativeYieldToFiveYear, Update< CumulativeYield > updateCumulativeYieldToThreeYear, Update< CumulativeYield > updateCumulativeYieldToOneYear, Update< CumulativeYield > updateCumulativeYieldSinceCreation, CumulativeYieldRepository cumulativeYieldRepository, DataStorageHandler dataStorageHandler, Request request ) {
+    public CumulativeYieldController( Create< CumulativeYield > createCumulativeYield, Update< CumulativeYield > updateCumulativeYieldToTenYear, Update< CumulativeYield > updateCumulativeYieldToFiveYear, Update< CumulativeYield > updateCumulativeYieldToThreeYear, Update< CumulativeYield > updateCumulativeYieldToOneYear, Update< CumulativeYield > updateCumulativeYieldSinceCreation, CumulativeYieldRepository cumulativeYieldRepository, ExchangeTradedFundRepository exchangeTradedFundRepository, DataStorageHandler dataStorageHandler, Request request ) {
         this.createCumulativeYield              = createCumulativeYield;
         this.updateCumulativeYieldToTenYear     = updateCumulativeYieldToTenYear;
         this.updateCumulativeYieldToFiveYear    = updateCumulativeYieldToFiveYear;
@@ -36,6 +39,7 @@ public class CumulativeYieldController {
         this.updateCumulativeYieldToOneYear     = updateCumulativeYieldToOneYear;
         this.updateCumulativeYieldSinceCreation = updateCumulativeYieldSinceCreation;
         this.cumulativeYieldRepository          = cumulativeYieldRepository;
+        this.exchangeTradedFundRepository       = exchangeTradedFundRepository;
         this.dataStorageHandler                 = dataStorageHandler;
         this.request                            = request;
     }
@@ -46,6 +50,14 @@ public class CumulativeYieldController {
         CumulativeYield cumulativeYield = cumulativeYieldRepository.findOrFail( id );
 
         return ResponseEntity.ok( Encoder.encode( cumulativeYield ) );
+    }
+
+
+    @GetMapping( path = "/by/exchange_traded_fund/{id:[0-9]+}" )
+    public ResponseEntity< Map< String, Object > > findAllByExchangeTradedFund( @PathVariable( "id" ) long id ) {
+        ExchangeTradedFund exchangeTradedFund = exchangeTradedFundRepository.findOrFail( id );
+
+        return ResponseEntity.ok( Encoder.encode( exchangeTradedFund.getCumulativeYield() ) );
     }
 
 

@@ -3,9 +3,17 @@ package org.romainlavabre.financetracker.entity;
 import jakarta.persistence.*;
 import org.romainlavabre.encoder.annotation.Group;
 import org.romainlavabre.encoder.annotation.Json;
+import org.romainlavabre.encoder.annotation.JsonPut;
+import org.romainlavabre.encoder.annotation.Row;
 import org.romainlavabre.exception.HttpUnprocessableEntityException;
+import org.romainlavabre.financetracker.configuration.json.put.PutCountryName;
 import org.romainlavabre.financetracker.configuration.response.Message;
 
+@JsonPut( groups = {
+        @Group( row = {
+                @Row( key = "country_name", handler = PutCountryName.class )
+        } )
+} )
 @Entity
 public class CountryDistribution {
 

@@ -106,7 +106,7 @@ public class ExchangeTradedFundController {
 
 
     @Transactional
-    @PatchMapping( path = "/{id:[0-9]+}/product_id" )
+    @PatchMapping( path = { "/{id:[0-9]+}/product_id", "/{id:[0-9]+}/product" } )
     public ResponseEntity< Map< String, Object > > updateProductId( @PathVariable( "id" ) long id ) {
         ExchangeTradedFund exchangeTradedFund = exchangeTradedFundRepository.findOrFail( id );
 

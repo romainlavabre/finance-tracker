@@ -11,6 +11,7 @@ import org.romainlavabre.request.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,6 +40,14 @@ public class CountryController {
         Country country = countryRepository.findOrFail( id );
 
         return ResponseEntity.ok( Encoder.encode( country ) );
+    }
+
+
+    @GetMapping
+    public ResponseEntity< List< Map< String, Object > > > findAll() {
+        List< Country > countries = countryRepository.findAll();
+
+        return ResponseEntity.ok( Encoder.encode( countries ) );
     }
 
 

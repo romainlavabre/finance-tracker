@@ -11,6 +11,7 @@ import org.romainlavabre.request.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,6 +38,14 @@ public class SectorController {
         Sector sector = sectorRepository.findOrFail( id );
 
         return ResponseEntity.ok( Encoder.encode( sector ) );
+    }
+
+
+    @GetMapping
+    public ResponseEntity< List< Map< String, Object > > > findAll() {
+        List< Sector > sectors = sectorRepository.findAll();
+
+        return ResponseEntity.ok( Encoder.encode( sectors ) );
     }
 
 
