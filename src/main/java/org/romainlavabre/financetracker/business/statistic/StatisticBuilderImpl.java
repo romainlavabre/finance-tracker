@@ -234,7 +234,8 @@ public class StatisticBuilderImpl implements StatisticBuilder {
     public List< PastPerformanceAggregateByYear > getPastPerformanceAggregateByYear() {
         List< ExchangeTradedFundDistribution > exchangeTradedFundDistributions = getExchangeTradedFundDistribution();
 
-        Map< Short, Float > value = new HashMap<>();
+        Map< Short, Float > value       = new HashMap<>();
+        Map< Short, Float > coefficient = new HashMap<>();
 
         for ( ExchangeTradedFundDistribution exchangeTradedFundDistribution : exchangeTradedFundDistributions ) {
             ExchangeTradedFund exchangeTradedFund = exchangeTradedFundRepository.findOrFail( exchangeTradedFundDistribution.id );
@@ -246,14 +247,19 @@ public class StatisticBuilderImpl implements StatisticBuilder {
                     value.put( year, 0f );
                 }
 
+                if ( !coefficient.containsKey( year ) ) {
+                    coefficient.put( year, 0f );
+                }
+
                 value.put( year, value.get( year ) + ( annuallyYield.getYield() * exchangeTradedFundDistribution.weight ) );
+                coefficient.put( year, coefficient.get( year ) + exchangeTradedFundDistribution.weight );
             }
         }
 
         List< PastPerformanceAggregateByYear > pastPerformanceAggregateByYears = new ArrayList<>();
 
         for ( Map.Entry< Short, Float > entry : value.entrySet() ) {
-            pastPerformanceAggregateByYears.add( new PastPerformanceAggregateByYear( entry.getKey(), entry.getValue() / 100 ) );
+            pastPerformanceAggregateByYears.add( new PastPerformanceAggregateByYear( entry.getKey(), entry.getValue() / coefficient.get( entry.getKey() ) ) );
         }
 
         return pastPerformanceAggregateByYears;
