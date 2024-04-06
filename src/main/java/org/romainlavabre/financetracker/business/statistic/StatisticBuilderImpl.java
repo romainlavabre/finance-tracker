@@ -267,6 +267,69 @@ public class StatisticBuilderImpl implements StatisticBuilder {
 
 
     @Override
+    public CumulativeYield getCumulativeYield() {
+        List< ExchangeTradedFundDistribution > exchangeTradedFundDistributions = getExchangeTradedFundDistribution();
+
+        Map< String, Float > value = new HashMap<>();
+        value.put( "to_ten_year", 0f );
+        value.put( "to_five_year", 0f );
+        value.put( "to_three_year", 0f );
+        value.put( "to_one_year", 0f );
+        value.put( "since_creation", 0f );
+
+        Map< String, Float > coefficient = new HashMap<>();
+        coefficient.put( "to_ten_year", 0f );
+        coefficient.put( "to_five_year", 0f );
+        coefficient.put( "to_three_year", 0f );
+        coefficient.put( "to_one_year", 0f );
+        coefficient.put( "since_creation", 0f );
+
+        for ( ExchangeTradedFundDistribution exchangeTradedFundDistribution : exchangeTradedFundDistributions ) {
+            ExchangeTradedFund                                      exchangeTradedFund = exchangeTradedFundRepository.findOrFail( exchangeTradedFundDistribution.id );
+            org.romainlavabre.financetracker.entity.CumulativeYield cumulativeYield    = exchangeTradedFund.getCumulativeYield();
+
+            if ( cumulativeYield == null ) {
+                continue;
+            }
+
+            if ( cumulativeYield.getToTenYear() != null ) {
+                value.put( "to_ten_year", value.get( "to_ten_year" ) + ( cumulativeYield.getToTenYear() * exchangeTradedFundDistribution.weight ) );
+                coefficient.put( "to_ten_year", coefficient.get( "to_ten_year" ) + exchangeTradedFundDistribution.weight );
+            }
+
+            if ( cumulativeYield.getToFiveYear() != null ) {
+                value.put( "to_five_year", value.get( "to_five_year" ) + ( cumulativeYield.getToFiveYear() * exchangeTradedFundDistribution.weight ) );
+                coefficient.put( "to_five_year", coefficient.get( "to_five_year" ) + exchangeTradedFundDistribution.weight );
+            }
+
+            if ( cumulativeYield.getToThreeYear() != null ) {
+                value.put( "to_three_year", value.get( "to_three_year" ) + ( cumulativeYield.getToThreeYear() * exchangeTradedFundDistribution.weight ) );
+                coefficient.put( "to_three_year", coefficient.get( "to_three_year" ) + exchangeTradedFundDistribution.weight );
+            }
+
+            if ( cumulativeYield.getToOneYear() != null ) {
+                value.put( "to_one_year", value.get( "to_one_year" ) + ( cumulativeYield.getToOneYear() * exchangeTradedFundDistribution.weight ) );
+                coefficient.put( "to_one_year", coefficient.get( "to_one_year" ) + exchangeTradedFundDistribution.weight );
+            }
+
+            if ( cumulativeYield.getSinceCreation() != null ) {
+                value.put( "since_creation", value.get( "since_creation" ) + ( cumulativeYield.getSinceCreation() * exchangeTradedFundDistribution.weight ) );
+                coefficient.put( "since_creation", coefficient.get( "since_creation" ) + exchangeTradedFundDistribution.weight );
+            }
+
+        }
+
+        return new CumulativeYield(
+                value.get( "to_ten_year" ) / coefficient.get( "to_ten_year" ),
+                value.get( "to_five_year" ) / coefficient.get( "to_five_year" ),
+                value.get( "to_three_year" ) / coefficient.get( "to_three_year" ),
+                value.get( "to_one_year" ) / coefficient.get( "to_one_year" ),
+                value.get( "since_creation" ) / coefficient.get( "since_creation" )
+        );
+    }
+
+
+    @Override
     public AveragePricing getAveragePricing() {
         List< ExchangeTradedFundDistribution > exchangeTradedFundDistributions = getExchangeTradedFundDistribution();
 

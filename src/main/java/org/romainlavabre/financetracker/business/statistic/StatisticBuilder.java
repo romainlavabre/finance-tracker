@@ -56,6 +56,12 @@ public interface StatisticBuilder {
 
 
     /**
+     * @return Cumulative yield of your portfolio
+     */
+    CumulativeYield getCumulativeYield();
+
+
+    /**
      * @return Average pricing weighted by the weight of ETF
      */
     AveragePricing getAveragePricing();

@@ -86,6 +86,14 @@ public class StatisticController {
     }
 
 
+    @GetMapping( path = "/cumulative_yield" )
+    public ResponseEntity< Map< String, Object > > getCumulativeYield() {
+        CumulativeYield cumulativeYield = statisticBuilder.getCumulativeYield();
+
+        return ResponseEntity.ok( Encoder.encode( cumulativeYield ) );
+    }
+
+
     @GetMapping( path = "/average_pricing" )
     public ResponseEntity< Map< String, Object > > getAveragePricing() {
         AveragePricing averagePricing = statisticBuilder.getAveragePricing();
